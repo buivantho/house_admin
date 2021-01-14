@@ -12,8 +12,26 @@ const firebaseConfig = {
   };
   firebase.initializeApp(firebaseConfig);
 const database = firebase.firestore();
+const dataProducts = [];
 
 class Content extends Component {
+  
+  getData = () => {
+    database.collection('products').doc('327966332').collection('datas').get()
+  .then(response => {
+   
+
+    console.log(response)
+    // console.log(response.)
+    response.forEach(document => {
+      dataProducts.push(document.data())
+      console.log(document.data())
+    })
+  })
+
+
+  }
+  
     handleClick = () => {
         console.log('this isss:');
       }
@@ -22,13 +40,17 @@ class Content extends Component {
         this.state = {favoritecolor: "red"};
 
       }
-      
+    
 componentDidMount() {
+  this.getData();
     setTimeout(() => {
+     
       this.setState({favoritecolor: "yellow"})
     }, 1000)
   }
+ 
     render() {
+      
         return (
             <div>
   {/* Navigation */}
@@ -60,10 +82,23 @@ componentDidMount() {
   </nav>
   {/* Page Content */}
   <div className="container">
-  <h1>My Favorite Color is {this.state.favoritecolor}</h1>
+  {/* <h1>My Favorite Color is {this.state.favoritecolor}</h1>
   <button onClick={this.handleClick}>
         Click me
-      </button>
+      </button> */}
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+        </tr>
+      </thead>
+      <tbody>
+        {dataProducts.map(data => (
+          <tr>{data.full_name}</tr>
+        ))}
+      </tbody>
+    </table>
+      
   </div>
 </div>
 
