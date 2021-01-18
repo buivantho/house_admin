@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import firebase from 'firebase';
+import { FcPlus } from 'react-icons/fc';
+import Popup from 'reactjs-popup';
 const firebaseConfig = {
     apiKey: "AIzaSyCSRz9lrw6UhwdfkZLxDbgLijEYPFKFW7c",
     authDomain: "housecleaning-48afb.firebaseapp.com",
@@ -14,6 +16,7 @@ const firebaseConfig = {
 const database = firebase.firestore();
 const dataProducts = [];
 const dataId = [];
+const itemOders =[];
 const dataUserPhone =[];
 class Content extends Component {
   constructor(props) {
@@ -24,9 +27,12 @@ class Content extends Component {
       obj :[] ,
       objId :[] ,
       objUserPhone:[],
+      objItemOder:[],
       value: 0,
+      query:"",
     };
     this.handleChange = this.handleChange.bind(this);
+    // this.searchInputChange = this.searchInputChange.bind(this);
 
   }
   getdatauser = () =>{
@@ -87,21 +93,14 @@ class Content extends Component {
     })
     console.log(key)
     console.log(this.state.value)
-
+    this.getdatauser();
+    
 }
-//     handleClick = (index) => {
-//       console.log(index)
-//       console.log("index")
-//       // var x = document.getElementById("value").value;
-// // var tes = document.getElementsByClassName
-// // document.getElementById("inlineFormCustomSelect").value = 1
-//         // console.log(x);
-//         // console.log(index);
-// // database.collection('products').doc('327966332').collection('datas').doc('uZbt4H8mamYV4CC37EVE').update({
-// //     status : x*1
-// // })
 
-//       }
+showService(key,data){
+
+  this.setState({objItemOder: data.items_oder})
+}
    
       componentDidMount() {
        this.getdatauser();
@@ -123,6 +122,7 @@ class Content extends Component {
     console.log(this.state.obj)
     console.log(this.state.objId[0])
     console.log(this.state.objUserPhone)
+    console.log(this.state.objItemOder)
         return (
           this.state.isLoading  ? <div><h1>loading ....</h1></div> :  <div>
               
@@ -157,13 +157,13 @@ class Content extends Component {
           <div className="card-body">
           {dataProducts == [] ? <h1>Loading</h1> : 
           <div className="datatable">
-          <div id="dataTable_wrapper" className="dataTables_wrapper dt-bootstrap4"><div className="row"><div className="col-sm-12 col-md-6"><div className="dataTables_length" id="dataTable_length"><label>Show 
-            <select name="dataTable_length" aria-controls="dataTable" className="custom-select custom-select-sm form-control form-control-sm"><option value={10}>10</option><option value={25}>25</option><option value={50}>50</option><option value={100}>100</option></select> entries</label></div></div><div className="col-sm-12 col-md-6"><div id="dataTable_filter" className="dataTables_filter">
+          <div id="dataTable_wrapper" className="dataTables_wrapper dt-bootstrap4"><div className="row"><div className="col-sm-12 col-md-6"><div className="dataTables_length" id="dataTable_length">
+              </div></div><div className="col-sm-12 col-md-6"><div id="dataTable_filter" className="dataTables_filter">
               <label>Search:<input type="search"  value={this.state.query}
-            onChange={this.handleInputChange} className="form-control form-control-sm" placeholder aria-controls="dataTable" /></label></div></div></div><div className="row"><div className="col-sm-12"><table className="table table-bordered table-hover dataTable" id="dataTable" width="100%" cellSpacing={0} role="grid" aria-describedby="dataTable_info" style={{width: '100%'}}>
+            onChange={this.searchInputChange} className="form-control form-control-sm" placeholder aria-controls="dataTable" /></label></div></div></div><div className="row"><div className="col-sm-12"><table className="table table-bordered table-hover dataTable" id="dataTable" width="100%" cellSpacing={0} role="grid" aria-describedby="dataTable_info" style={{width: '100%'}}>
                   <thead>
-                  <tr><th rowSpan={1} colSpan={1}>Người đặt</th><th rowSpan={1} colSpan={1}>Địa chỉ</th><th rowSpan={1} colSpan={1}>Số điện thoại</th><th rowSpan={1} colSpan={1}>Giá đơn hàng</th><th rowSpan={1} colSpan={1}>Thời gian giao</th><th rowSpan={1} colSpan={1}>Thang toán</th><th rowSpan={1} colSpan={1}>Xác nhận đơn 
-                  </th><th rowSpan={1} colSpan={1}>Status</th><th rowSpan={1} colSpan={1}> ss</th></tr>
+                  <tr><th rowSpan={1} colSpan={1}>Mã đơn hàng</th><th rowSpan={1} colSpan={1}>Người đặt</th><th rowSpan={1} colSpan={1}>Địa chỉ</th><th rowSpan={1} colSpan={1}>Số điện thoại</th><th rowSpan={1} colSpan={1}>Giá đơn hàng</th><th rowSpan={1} colSpan={1}>Thời gian giao</th><th rowSpan={1} colSpan={1}>Thang toán</th><th rowSpan={1} colSpan={1}>Xác nhận đơn 
+                  </th><th rowSpan={1} colSpan={1}>Status</th><th rowSpan={1} colSpan={1}>Cập nhật</th><th rowSpan={1} colSpan={1}>Đơn hàng	</th></tr>
                   </thead>
                   {/* <tfoot>
                     <tr><th rowSpan={1} colSpan={1}>Name</th><th rowSpan={1} colSpan={1}>Position</th><th rowSpan={1} colSpan={1}>Office</th><th rowSpan={1} colSpan={1}>Age</th><th rowSpan={1} colSpan={1}>Start date</th><th rowSpan={1} colSpan={1}>Salary</th><th rowSpan={1} colSpan={1}>Status</th><th rowSpan={1} colSpan={1}>Actions</th></tr>
@@ -171,7 +171,8 @@ class Content extends Component {
                   <tbody>
                   {this.state.obj.map((data,i) =>(
                     <tr role="row" className="odd" key={i}> 
-                      <td className="sorting_1">{data.full_name}</td>
+                  <td>{data.service_code}</td>
+                  <td className="sorting_1">{data.full_name}</td>
                   <td>{data.address}</td>
                   <td>{data.phoneNumber}</td>
                   <td>{data.price}</td>
@@ -186,37 +187,37 @@ class Content extends Component {
                   </td>
                   <td>{data.status == 0 ? "Chưa xác nhận" : data.status == 1 ? "Đã thu tiền" : data.status == 2 ? "Đang giao": data.status == 3 ? "Hoàn thành": ""}</td>
                       <td>
-                        <button onClick={()=>this.handleClick(i,data)} className="btn btn-datatable btn-icon btn-transparent-dark"><svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="feather feather-trash-2"><polyline points="3 6 5 6 21 6" /><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /><line x1={10} y1={11} x2={10} y2={17} /><line x1={14} y1={11} x2={14} y2={17} /></svg></button>
+                        <button onClick={()=>this.handleClick(i,data)} className="btn btn-datatable btn-icon btn-transparent-dark"><FcPlus /></button>
+                      </td>
+                      <td>
+                      <Popup modal trigger={<button>Click Me</button>}>
+                          <div ></div>
+                      </Popup>
+                        {/* <button onClick={()=>this.showService(i,data)} className="btn btn-datatable btn-icon btn-transparent-dark"><FcPlus /></button> */}
                       </td>
                     </tr>
                      ))}
+                      <tr role="row" className="odd" > 
+                  <td>Ư</td>
+                  <td className="sorting_1">Ư</td>
+                  <td>Ư</td>
+                  <td>Ư</td>
+                  <td>Ư</td>
+                  <td>Ư</td>
+                  <td>Ư</td>
+                  
+                
+                    </tr>
                     </tbody>
+                
                 </table></div></div><div className="row"><div className="col-sm-12 col-md-5"><div className="dataTables_info" id="dataTable_info" role="status" aria-live="polite">Showing 1 to 10 of 57 entries</div></div><div className="col-sm-12 col-md-7"><div className="dataTables_paginate paging_simple_numbers" id="dataTable_paginate"><ul className="pagination"><li className="paginate_button page-item previous disabled" id="dataTable_previous"><a href="#" aria-controls="dataTable" data-dt-idx={0} tabIndex={0} className="page-link">Previous</a></li><li className="paginate_button page-item active"><a href="#" aria-controls="dataTable" data-dt-idx={1} tabIndex={0} className="page-link">1</a></li><li className="paginate_button page-item "><a href="#" aria-controls="dataTable" data-dt-idx={2} tabIndex={0} className="page-link">2</a></li><li className="paginate_button page-item "><a href="#" aria-controls="dataTable" data-dt-idx={3} tabIndex={0} className="page-link">3</a></li><li className="paginate_button page-item "><a href="#" aria-controls="dataTable" data-dt-idx={4} tabIndex={0} className="page-link">4</a></li><li className="paginate_button page-item "><a href="#" aria-controls="dataTable" data-dt-idx={5} tabIndex={0} className="page-link">5</a></li><li className="paginate_button page-item "><a href="#" aria-controls="dataTable" data-dt-idx={6} tabIndex={0} className="page-link">6</a></li><li className="paginate_button page-item next" id="dataTable_next"><a href="#" aria-controls="dataTable" data-dt-idx={7} tabIndex={0} className="page-link">Next</a></li></ul></div></div></div></div>
+               
+
         </div>
+        
           }
           
         </div>
-        
-        
-          {/* <h1>My Favorite Color is {this.state.favoritecolor}</h1>
-          <button onClick={this.handleClick}>
-                Click me
-              </button> */}
-            {/* <table>
-              <thead key="thead">
-                <tr>
-                  <th>#</th>
-                </tr>
-              </thead>
-              <tbody>
-                {dataProducts.map((data,i) =>(
-                  <tr ><td key={i}>
-                    {data.full_name}
-                    </td></tr>
-                ))}
-              </tbody>
-            </table>
-               */}
           </div>
            
 
