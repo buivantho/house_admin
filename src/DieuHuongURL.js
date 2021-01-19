@@ -11,11 +11,9 @@ class DieuHuongURL extends Component {
     render() {
         return (
             <Router>
-            <div>
-                <Router exactact path='/' Component={Content}/>
-                <Router  path='/oder' Component={OrderComponent}/>
-            </div>
-        </Router>
+                <Router exactact path='/' children={Content}/>
+                <Router path='/oder' children={OrderComponent}/>
+            </Router>
         );
     }
 }

@@ -1,19 +1,8 @@
 import React, { Component } from 'react';
-import firebase from 'firebase';
 import { FcPlus } from 'react-icons/fc';
 import Popup from 'reactjs-popup';
-const firebaseConfig = {
-    apiKey: "AIzaSyCSRz9lrw6UhwdfkZLxDbgLijEYPFKFW7c",
-    authDomain: "housecleaning-48afb.firebaseapp.com",
-    databaseURL: "https://housecleaning-48afb.firebaseio.com",
-    projectId: "housecleaning-48afb",
-    storageBucket: "housecleaning-48afb.appspot.com",
-    messagingSenderId: "896399952076",
-    appId: "1:896399952076:web:a37e46afa0223098a89a69",
-    measurementId: "G-WY1HQ1G0GK"
-  };
-  firebase.initializeApp(firebaseConfig);
-const database = firebase.firestore();
+import database from '../../../firebase'
+
 const dataProducts = [];
 const dataId = [];
 const itemOders =[];
@@ -98,9 +87,11 @@ class Content extends Component {
 }
 
 showService(key,data){
-
   this.setState({objItemOder: data.items_oder})
+  this.setState({open: true});
 }
+
+
    
       componentDidMount() {
        this.getdatauser();
@@ -125,34 +116,8 @@ showService(key,data){
     console.log(this.state.objItemOder)
         return (
           this.state.isLoading  ? <div><h1>loading ....</h1></div> :  <div>
-              
           {/* Navigation */}
-          <nav className="navbar navbar-expand-lg navbar-light bg-light static-top mb-5 shadow">
-            <div className="container">
-              <a className="navbar-brand" href="#"></a>
-              <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-                <span className="navbar-toggler-icon" />
-              </button>
-              <div className="collapse navbar-collapse" id="navbarResponsive">
-                <ul className="navbar-nav ml-auto">
-                  <li className="nav-item active">
-                    <a className="nav-link" href="#">Home
-                      <span className="sr-only">(current)</span>
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a className="nav-link" href="#">Đã Bán</a>
-                  </li>
-                  <li className="nav-item">
-                    <a className="nav-link" href="#">Đơn hàng</a>
-                  </li>
-                  <li className="nav-item">
-                    <a className="nav-link" href="#">Thống kê</a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-                    </nav>
+          
          
           <div className="card-body">
           {dataProducts == [] ? <h1>Loading</h1> : 
@@ -190,27 +155,53 @@ showService(key,data){
                         <button onClick={()=>this.handleClick(i,data)} className="btn btn-datatable btn-icon btn-transparent-dark"><FcPlus /></button>
                       </td>
                       <td>
-                      <Popup modal trigger={<button>Click Me</button>}>
-                          <div ></div>
+                    
+                      <Popup modal onOpen={()=>this.showService(i,data)} trigger={ <button  > Chi tiết</button>   } >
+                      <div className="card mb-4 popup" style={{width: '100%', background: 'whitesmoke'}} >
+                          <div className="card-header">Danh sách đơn hàng</div>
+                          <div className="card-body">
+                            <div className="datatable">
+                              <div id="dataTable_wrapper" className="dataTables_wrapper dt-bootstrap4"><div className="row">
+                                <div className="col-sm-12 col-md-6">
+                                  <div className="dataTables_length" id="dataTable_length">
+                                   </div></div><div className="col-sm-12 col-md-6"></div></div><div className="row"><div className="col-sm-12"><table className="table table-bordered table-hover dataTable" id="dataTable" width="100%" cellSpacing={0} role="grid" aria-describedby="dataTable_info" style={{width: '100%'}}>
+                                      <thead>
+
+                                      </thead>
+            
+                                        <tr><th rowSpan={1} colSpan={1}>Tên sản phẩm</th><th rowSpan={1} colSpan={1}>số lượng</th><th rowSpan={1} colSpan={1}>Đơn giá</th><th rowSpan={1} colSpan={1}>Thành tiền</th></tr>
+                                     
+                                      <tbody>
+                                        {this.state.objItemOder.map((items,i) => (
+                                          <tr role="row" className="odd">
+                                            <td className="sorting_1">{items.name_maker}</td>
+                                            <td>{items.qty}</td>
+                                            <td>{items.price}</td>
+                                            <td>{items.qty * items.price}.đ</td>
+                                          </tr>
+                                        ))}
+                                        
+
+                                        </tbody>
+                                    </table></div></div>
+                                    </div>
+                            </div>
+                          </div>
+                        </div>
+
                       </Popup>
+                  
+                        
+                       
+                      
                         {/* <button onClick={()=>this.showService(i,data)} className="btn btn-datatable btn-icon btn-transparent-dark"><FcPlus /></button> */}
                       </td>
                     </tr>
                      ))}
-                      <tr role="row" className="odd" > 
-                  <td>Ư</td>
-                  <td className="sorting_1">Ư</td>
-                  <td>Ư</td>
-                  <td>Ư</td>
-                  <td>Ư</td>
-                  <td>Ư</td>
-                  <td>Ư</td>
-                  
-                
-                    </tr>
                     </tbody>
                 
-                </table></div></div><div className="row"><div className="col-sm-12 col-md-5"><div className="dataTables_info" id="dataTable_info" role="status" aria-live="polite">Showing 1 to 10 of 57 entries</div></div><div className="col-sm-12 col-md-7"><div className="dataTables_paginate paging_simple_numbers" id="dataTable_paginate"><ul className="pagination"><li className="paginate_button page-item previous disabled" id="dataTable_previous"><a href="#" aria-controls="dataTable" data-dt-idx={0} tabIndex={0} className="page-link">Previous</a></li><li className="paginate_button page-item active"><a href="#" aria-controls="dataTable" data-dt-idx={1} tabIndex={0} className="page-link">1</a></li><li className="paginate_button page-item "><a href="#" aria-controls="dataTable" data-dt-idx={2} tabIndex={0} className="page-link">2</a></li><li className="paginate_button page-item "><a href="#" aria-controls="dataTable" data-dt-idx={3} tabIndex={0} className="page-link">3</a></li><li className="paginate_button page-item "><a href="#" aria-controls="dataTable" data-dt-idx={4} tabIndex={0} className="page-link">4</a></li><li className="paginate_button page-item "><a href="#" aria-controls="dataTable" data-dt-idx={5} tabIndex={0} className="page-link">5</a></li><li className="paginate_button page-item "><a href="#" aria-controls="dataTable" data-dt-idx={6} tabIndex={0} className="page-link">6</a></li><li className="paginate_button page-item next" id="dataTable_next"><a href="#" aria-controls="dataTable" data-dt-idx={7} tabIndex={0} className="page-link">Next</a></li></ul></div></div></div></div>
+                </table></div></div></div>
+     
                
 
         </div>
