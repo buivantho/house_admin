@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import database from '../../firebase'
-
+import Popup from 'reactjs-popup';
 const dataMaker = [];
 class OrderComponent extends Component {
     constructor(props) {
         super(props);
         this.state = { 
-         objMaker:[]
+         objMaker:[],
+         statusShowAddData: false,
         };
     }
     getdatauser = () =>{
@@ -26,11 +27,20 @@ class OrderComponent extends Component {
                 this.setState({favoritecolor: "yellow"})
         }, 1000)
     }
+    showAddData = () => {
+        if(this.state.statusShowAddData == false){
+            this.setState({statusShowAddData: true,})
+        }else{
+            this.setState({statusShowAddData: false,})
+        }
+    }
     render() {
+        // onOpen={()=>this.showService(i,data)}  
         console.log(this.state.objMaker)
         return (
             <div className="card mb-4">
-                <div className="card-header">Danh sách mặt hàng được bán</div>
+                <div className="card-header">Danh sách mặt hàng được bán 
+                      </div>
                 <div className="card-body">
                     <div className="datatable">
                     <div id="dataTable_wrapper" className="dataTables_wrapper dt-bootstrap4"><div className="row"><div className="col-sm-12 col-md-6"><div className="dataTables_length" id="dataTable_length"><label>Show <select name="dataTable_length" aria-controls="dataTable" className="custom-select custom-select-sm form-control form-control-sm"><option value={10}>10</option><option value={25}>25</option><option value={50}>50</option><option value={100}>100</option></select> entries</label></div></div><div className="col-sm-12 col-md-6"><div id="dataTable_filter" className="dataTables_filter"><label>Search:<input type="search" className="form-control form-control-sm" placeholder aria-controls="dataTable" /></label></div></div></div><div className="row"><div className="col-sm-12"><table className="table table-bordered table-hover dataTable" id="dataTable" width="100%" cellSpacing={0} role="grid" aria-describedby="dataTable_info" style={{width: '100%'}}>
@@ -44,9 +54,44 @@ class OrderComponent extends Component {
                             <th rowSpan={1} colSpan={1}>Số hỗ trợ</th>
                             <th rowSpan={1} colSpan={1}>Đại chỉ/chi nhánh</th>
                             <th rowSpan={1} colSpan={1}>Status</th>
-                            <th rowSpan={1} colSpan={1}>Chỉnh sửa</th>
+                            {this.state.statusShowAddData == false ? <th  rowSpan={1} colSpan={1}>Chỉnh sửa</th> : "" }
+                            <th rowSpan={1} colSpan={1}><button onClick={()=>this.showAddData()}> {this.state.statusShowAddData == false ? "Thêm mới": "Đóng"}</button></th>
                         </tr>
                         <tbody>
+                            {this.state.statusShowAddData == true ? <tr role="row" className="odd">
+                                <td><div >
+                                    <input type="text" value={this.state.value} onChange={this.handleChange}  placeholder="Nhập tên sản phẩm" />
+                                    </div>
+                                </td>
+                                <td><div >
+                                    <input type="number" value={this.state.value} onChange={this.handleChange}  placeholder="Giá sản phẩm" />
+                                </div></td>
+                                <td><div >
+                                    <input type="text" value={this.state.value} onChange={this.handleChange}  placeholder="Từ khoá mã giảm giá" />
+                                </div></td>
+                                <td><div >
+                                    <input type="number" value={this.state.value} onChange={this.handleChange} placeholder="Nhập % giảm của sản phẩm" />
+                                </div></td>
+                                <td><div >
+                                    <input type="number" value={this.state.value} onChange={this.handleChange} placeholder="Đánh giá lúc đầu" />
+                                </div></td>
+                                <td><div >
+                                    <input type="text" value={this.state.value} onChange={this.handleChange}  placeholder="Đơn vị tính VD: gói, cân" />
+                                </div></td>
+                                <td><div >
+                                    <input type="number" value={this.state.value} onChange={this.handleChange}  placeholder="Số điện thoại hỗ trợ " />
+                                </div></td>
+                                <td><div >
+                                    <input type="text" value={this.state.value} onChange={this.handleChange}  placeholder="Chi nhánh để hàng " />
+                                </div></td>
+                                <td><div >
+                                    <input type="text" value={this.state.value} onChange={this.handleChange} placeholder="Trạng thái" />
+                                </div></td>
+                                <td><div >
+                                    <button>Thêm</button>
+                                </div></td>
+                            </tr> : ""}
+                            
                             {this.state.objMaker.map((data,i) => (
                                 <tr role="row" className="odd">
                                     <td className="sorting_1">{data.name_product}</td>
@@ -61,6 +106,7 @@ class OrderComponent extends Component {
                                     <td>
                                         <button className="btn btn-datatable btn-icon btn-transparent-dark mr-2"><svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="feather feather-more-vertical"><circle cx={12} cy={12} r={1} /><circle cx={12} cy={5} r={1} /><circle cx={12} cy={19} r={1} /></svg></button>
                                     </td>
+                                    <td></td>
                                 </tr>
                             ))}
                             </tbody>
@@ -70,38 +116,12 @@ class OrderComponent extends Component {
                             <div className="row"><div className="col-sm-12 col-md-5"><div className="dataTables_info" id="dataTable_info" role="status" aria-live="polite">Showing 1 to 10 of 57 entries</div></div><div className="col-sm-12 col-md-7"><div className="dataTables_paginate paging_simple_numbers" id="dataTable_paginate"><ul className="pagination"><li className="paginate_button page-item previous disabled" id="dataTable_previous"><a href="#" aria-controls="dataTable" data-dt-idx={0} tabIndex={0} className="page-link">Previous</a></li><li className="paginate_button page-item active"><a href="#" aria-controls="dataTable" data-dt-idx={1} tabIndex={0} className="page-link">1</a></li><li className="paginate_button page-item "><a href="#" aria-controls="dataTable" data-dt-idx={2} tabIndex={0} className="page-link">2</a></li><li className="paginate_button page-item "><a href="#" aria-controls="dataTable" data-dt-idx={3} tabIndex={0} className="page-link">3</a></li><li className="paginate_button page-item "><a href="#" aria-controls="dataTable" data-dt-idx={4} tabIndex={0} className="page-link">4</a></li><li className="paginate_button page-item "><a href="#" aria-controls="dataTable" data-dt-idx={5} tabIndex={0} className="page-link">5</a></li><li className="paginate_button page-item "><a href="#" aria-controls="dataTable" data-dt-idx={6} tabIndex={0} className="page-link">6</a></li><li className="paginate_button page-item next" id="dataTable_next"><a href="#" aria-controls="dataTable" data-dt-idx={7} tabIndex={0} className="page-link">Next</a></li></ul></div></div></div></div>
                     </div>
                 </div>
+                
                 </div>
+                
 
         );
     }
 }
 
 export default OrderComponent;
-
-// "90 quán thánh , ba đình , hà nội"
-// id
-// 2
-// id_product
-// 3
-// image
-// "assets/images/raucu.jpg"
-// images
-// 0
-// img
-// "assets/images/giavi.jpg"
-// name_product
-// "Bánh giò"
-// name_sale
-// "THODZd"
-// phone
-// 8427966332
-// price
-// 20000
-// sale_percent
-// 50
-// scales
-// 1
-// star
-// 3
-// unit
-// "Cái"

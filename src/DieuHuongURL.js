@@ -7,12 +7,15 @@ import {
     Route,
     Link
   } from "react-router-dom";
+import HomeComponent from './Components/HomeComponent';
 class DieuHuongURL extends Component {
     render() {
         return (
             <Router>
-                <Router exactact path='/' children={Content}/>
+                
+                <Router exactact path='/' children={HomeComponent}/>
                 <Router path='/oder' children={OrderComponent}/>
+                <Router path='/content' children={Content}/>
             </Router>
         );
     }

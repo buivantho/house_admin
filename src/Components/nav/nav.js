@@ -6,9 +6,6 @@ import {
     Link
   } from "react-router-dom";
 export default class Nav extends Component {
-    handleClick() {
-        this.props.history.push('/oder');
-      }
   render() {
     return (
         <Router>
@@ -23,17 +20,13 @@ export default class Nav extends Component {
                     <li className="nav-item active">
                         <Link to="/">Home</Link>
                     </li>
-                    <li className="nav-item">
-                    <button type="button" onClick={() => this.handleClick()}>
-        Hello
-      </button>
+                    <li className="nav-item active">
+                        <Link to="/oder">oder</Link>
                     </li>
-                    <li className="nav-item">
-                    <Link to="/oder"><a href='#' >sss</a></Link>
+                    <li className="nav-item active">
+                        <Link to="/content">Store</Link>
                     </li>
-                    <li className="nav-item">
-                        <a className="nav-link" href="#">Thống kê</a>
-                    </li>
+                  
                     </ul>
                 </div>
                 </div>
