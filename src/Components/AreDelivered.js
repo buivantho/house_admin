@@ -75,6 +75,8 @@ class AreDelivered extends Component {
       <a href="/delivered" className="list-group-item">Sản phẩm đã giao</a>
       <a href="/CompletedOder" className="list-group-item">Đơn hàng đã hoàn thành</a>
       <a href="/oderday" className="list-group-item">Đặt nhiều ngày</a>
+      <a href="/ListUser" className="list-group-item">Danh sách người dùng</a>
+      <a href="/ListUserShip" className="list-group-item">Danh sách người ship</a>
                       
                     </div>
                   </div>
