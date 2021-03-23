@@ -1,7 +1,14 @@
-.App {
-  text-align: center;
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  list-style:none;
 }
 
+.ellipsis.multiline {
+  white-space: normal;
+}
 .App-logo {
   height: 40vmin;
   pointer-events: none;
