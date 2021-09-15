@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import database from '../firebase'
+import axios from 'axios';
 import {
   BrowserRouter as Router,
   Switch,
@@ -58,10 +59,14 @@ class Home extends Component {
   }
   componentDidMount() {
     this.getDataProduc();
-      // setTimeout(() => {
-      //   this.setState({isLoading: false,})
-      //   this.setState({favoritecolor: "yellow"})
-      // }, 1000)
+
+    axios.post('https://itc.hubt.edu.vn/dang-nhap', {
+            "username": 18103488,
+            "password": "svhubt"
+        })
+      .then(function (response) {
+        console.log(response);
+      })
     }
     render() {
       console.log(this.state.obj_product)
